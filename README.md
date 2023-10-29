@@ -156,7 +156,21 @@ No known bugs at this time.
 ## Authors
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)
+Aibueku Precious Okwuoma- [Github](https://github.com/aibuekuoprecious) / [Twitter](https://twitter.com/pre_shial)
 
 Second part of Airbnb: Joann Vuong
 ## License
-Public Domain. No copy write protection. 
+Public Domain. No copy write protection.
+
+I learnt the following from this project;
+What REST means
+What API means
+What CORS means
+What is an API
+What is a REST API
+What are other type of APIs
+Which is the HTTP method to retrieve resource(s)
+Which is the HTTP method to create a resource
+Which is the HTTP method to update resource
+Which is the HTTP method to delete resource
+How to request REST API
