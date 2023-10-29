@@ -32,18 +32,17 @@ class DBStorage:
         HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
         HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
         HBNB_ENV = getenv('HBNB_ENV')
-
-        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.format(
-            HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB))
-
+        self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
+                                      format(HBNB_MYSQL_USER,
+                                             HBNB_MYSQL_PWD,
+                                             HBNB_MYSQL_HOST,
+                                             HBNB_MYSQL_DB))
         if HBNB_ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """returns a dictionary of all objects"""
-
+        """Return a dictionary of all objects."""
         obj_dict = {}
-
         if cls is not None:
             a_query = self.__session.query(DBStorage.CNC[cls])
             for obj in a_query:
@@ -56,51 +55,40 @@ class DBStorage:
             for obj in a_query:
                 obj_ref = "{}.{}".format(type(obj).__name__, obj.id)
                 obj_dict[obj_ref] = obj
-
         return obj_dict
 
     def new(self, obj):
         """add the object to the current database session"""
-
         self.__session.add(obj)
 
     def save(self):
         """commit all changes of the current database session"""
-
         self.__session.commit()
 
     def delete(self, obj=None):
         """delete from the current database session obj if not None"""
-
         if obj is not None:
             self.__session.delete(obj)
 
     def reload(self):
         """reloads data from the database"""
-
         Base.metadata.create_all(self.__engine)
-
         sess_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(sess_factory)
-
         self.__session = Session
 
     def close(self):
         """call remove() method on the private session attribute"""
-
         self.__session.remove()
 
     def get(self, cls, id):
         """retrieves one object based on class name and id"""
-
         if cls and id:
             fetch = "{}.{}".format(cls, id)
             all_obj = self.all(cls)
             return all_obj.get(fetch)
-
         return None
 
     def count(self, cls=None):
         """returns the count of all objects in storage"""
-
-        return len(self.all(cls))
+        return (len(self.all(cls)))
