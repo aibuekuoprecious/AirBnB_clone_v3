@@ -2,7 +2,6 @@
 """
 Contains the TestDBStorageDocs and TestDBStorage classes
 """
-
 from datetime import datetime
 import inspect
 import models
@@ -72,7 +71,7 @@ class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_returns_dict(self):
-        """Test that all returns a dictionaty"""
+        """Test that all returns a dictionary"""
         self.assertIs(type(models.storage.all()), dict)
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -86,3 +85,24 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_all(self):
+        """... checks if count() functions with no class"""
+        count_all = models.storage.count()
+        expected = 8
+        self.assertEqual(expected, count_all)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count_amenity(self):
+        """... checks if count() returns proper count with Class input"""
+        count_amenity = models.storage.count('Amenity')
+        expected = 3
+        self.assertEqual(expected, count_amenity)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get_place(self):
+        """... checks if get() function returns properly"""
+        duplicate = models.storage.get('Place', self.p1.id)
+        expected = self.p1.id
+        self.assertEqual(expected, duplicate.id)
