@@ -20,20 +20,20 @@ def list_users():
 def get_user(user_id):
     '''Retrieves a User object'''
     all_users = storage.all("User").values()
-    user_obj = [obj.to_dict() for obj in all_users if obj.id == user_id]
-    if user_obj == []:
+    user_data = [obj.to_dict() for obj in all_users if obj.id == user_id]
+    if user_data == []:
         abort(404)
-    return jsonify(user_obj[0])
+    return jsonify(user_data[0])
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'])
 def delete_user(user_id):
     '''Deletes a User object'''
     all_users = storage.all("User").values()
-    user_obj = [obj.to_dict() for obj in all_users if obj.id == user_id]
-    if user_obj == []:
+    user_data = [obj.to_dict() for obj in all_users if obj.id == user_id]
+    if user_data == []:
         abort(404)
-    user_obj.remove(user_obj[0])
+    user_data.remove(user_data[0])
     for obj in all_users:
         if obj.id == user_id:
             storage.delete(obj)
@@ -63,17 +63,17 @@ def create_user():
 def updates_user(user_id):
     '''Updates a User object'''
     all_users = storage.all("User").values()
-    user_obj = [obj.to_dict() for obj in all_users if obj.id == user_id]
-    if user_obj == []:
+    user_data = [obj.to_dict() for obj in all_users if obj.id == user_id]
+    if user_data == []:
         abort(404)
     if not request.get_json():
         abort(400, 'Not a JSON')
     try:
-        user_obj[0]['first_name'] = request.json['first_name']
+        user_data[0]['first_name'] = request.json['first_name']
     except:
         pass
     try:
-        user_obj[0]['last_name'] = request.json['last_name']
+        user_data[0]['last_name'] = request.json['last_name']
     except:
         pass
     for obj in all_users:
@@ -89,4 +89,4 @@ def updates_user(user_id):
             except:
                 pass
     storage.save()
-    return jsonify(user_obj[0]), 200
+    return jsonify(user_data[0]), 200

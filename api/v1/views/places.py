@@ -26,21 +26,21 @@ def list_places_of_city(city_id):
 def get_place(place_id):
     '''Retrieves a Place object'''
     all_places = storage.all("Place").values()
-    place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-    if place_obj == []:
+    place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+    if place_data == []:
         abort(404)
-    return jsonify(place_obj[0])
+    return jsonify(place_data[0])
 
 
 @app_views.route('/places/<place_id>', methods=['DELETE'])
 def delete_place(place_id):
     '''Deletes a Place object'''
     all_places = storage.all("Place").values()
-    place_obj = [obj.to_dict() for obj in all_places
+    place_data = [obj.to_dict() for obj in all_places
                  if obj.id == place_id]
-    if place_obj == []:
+    if place_data == []:
         abort(404)
-    place_obj.remove(place_obj[0])
+    place_data.remove(place_data[0])
     for obj in all_places:
         if obj.id == place_id:
             storage.delete(obj)
@@ -66,9 +66,9 @@ def create_place(city_id):
     new_place = Place(name=request.json['name'],
                       user_id=request.json['user_id'], city_id=city_id)
     all_users = storage.all("User").values()
-    user_obj = [obj.to_dict() for obj in all_users
+    user_data = [obj.to_dict() for obj in all_users
                 if obj.id == new_place.user_id]
-    if user_obj == []:
+    if user_data == []:
         abort(404)
     storage.new(new_place)
     storage.save()
@@ -80,27 +80,27 @@ def create_place(city_id):
 def updates_place(place_id):
     '''Updates a Place object'''
     all_places = storage.all("Place").values()
-    place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-    if place_obj == []:
+    place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+    if place_data == []:
         abort(404)
     if not request.get_json():
         abort(400, 'Not a JSON')
     if 'name' in request.get_json():
-        place_obj[0]['name'] = request.json['name']
+        place_data[0]['name'] = request.json['name']
     if 'description' in request.get_json():
-        place_obj[0]['description'] = request.json['description']
+        place_data[0]['description'] = request.json['description']
     if 'number_rooms' in request.get_json():
-        place_obj[0]['number_rooms'] = request.json['number_rooms']
+        place_data[0]['number_rooms'] = request.json['number_rooms']
     if 'number_bathrooms' in request.get_json():
-        place_obj[0]['number_bathrooms'] = request.json['number_bathrooms']
+        place_data[0]['number_bathrooms'] = request.json['number_bathrooms']
     if 'max_guest' in request.get_json():
-        place_obj[0]['max_guest'] = request.json['max_guest']
+        place_data[0]['max_guest'] = request.json['max_guest']
     if 'price_by_night' in request.get_json():
-        place_obj[0]['price_by_night'] = request.json['price_by_night']
+        place_data[0]['price_by_night'] = request.json['price_by_night']
     if 'latitude' in request.get_json():
-        place_obj[0]['latitude'] = request.json['latitude']
+        place_data[0]['latitude'] = request.json['latitude']
     if 'longitude' in request.get_json():
-        place_obj[0]['longitude'] = request.json['longitude']
+        place_data[0]['longitude'] = request.json['longitude']
     for obj in all_places:
         if obj.id == place_id:
             if 'name' in request.get_json():
@@ -120,4 +120,4 @@ def updates_place(place_id):
             if 'longitude' in request.get_json():
                 obj.longitude = request.json['longitude']
     storage.save()
-    return jsonify(place_obj[0]), 200
+    return jsonify(place_data[0]), 200

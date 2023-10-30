@@ -15,29 +15,29 @@ if getenv('HBNB_TYPE_STORAGE') == 'db':
     def list_amenities_of_place(place_id):
         ''' Retrieves a list of all Amenity objects of a Place '''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
-        list_amenities = []
+        amenity_list = []
         for obj in all_places:
             if obj.id == place_id:
                 for amenity in obj.amenities:
-                    list_amenities.append(amenity.to_dict())
-        return jsonify(list_amenities)
+                    amenity_list.append(amenity.to_dict())
+        return jsonify(amenity_list)
 
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                      methods=['POST'])
     def create_place_amenity(place_id, amenity_id):
         '''Creates a Amenity'''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
 
         all_amenities = storage.all("Amenity").values()
-        amenity_obj = [obj.to_dict() for obj in all_amenities
+        amenity_data = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
-        if amenity_obj == []:
+        if amenity_data == []:
             abort(404)
 
         amenities = []
@@ -56,16 +56,16 @@ if getenv('HBNB_TYPE_STORAGE') == 'db':
     def delete_place_amenity(place_id, amenity_id):
         '''Deletes a Amenity object'''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
 
         all_amenities = storage.all("Amenity").values()
-        amenity_obj = [obj.to_dict() for obj in all_amenities
+        amenity_data = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
-        if amenity_obj == []:
+        if amenity_data == []:
             abort(404)
-        amenity_obj.remove(amenity_obj[0])
+        amenity_data.remove(amenity_data[0])
 
         for obj in all_places:
             if obj.id == place_id:
@@ -83,29 +83,29 @@ else:
     def list_amenities_of_place(place_id):
         ''' Retrieves a list of all Amenity objects of a Place '''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
-        list_amenities = []
+        amenity_list = []
         for obj in all_places:
             if obj.id == place_id:
                 for amenity in obj.amenities:
-                    list_amenities.append(amenity.to_dict())
-        return jsonify(list_amenities)
+                    amenity_list.append(amenity.to_dict())
+        return jsonify(amenity_list)
 
     @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                      methods=['POST'])
     def create_place_amenity(place_id, amenity_id):
         '''Creates a Amenity'''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
 
         all_amenities = storage.all("Amenity").values()
-        amenity_obj = [obj.to_dict() for obj in all_amenities
+        amenity_data = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
-        if amenity_obj == []:
+        if amenity_data == []:
             abort(404)
 
         amenities = []
@@ -124,16 +124,16 @@ else:
     def delete_place_amenity(place_id, amenity_id):
         '''Deletes a Amenity object'''
         all_places = storage.all("Place").values()
-        place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-        if place_obj == []:
+        place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+        if place_data == []:
             abort(404)
 
         all_amenities = storage.all("Amenity").values()
-        amenity_obj = [obj.to_dict() for obj in all_amenities
+        amenity_data = [obj.to_dict() for obj in all_amenities
                        if obj.id == amenity_id]
-        if amenity_obj == []:
+        if amenity_data == []:
             abort(404)
-        amenity_obj.remove(amenity_obj[0])
+        amenity_data.remove(amenity_data[0])
 
         for obj in all_places:
             if obj.id == place_id:
@@ -151,8 +151,8 @@ else:
 def get_place_amenity(amenity_id):
     '''Retrieves a Amenity object '''
     all_amenities = storage.all("Amenity").values()
-    amenity_obj = [obj.to_dict() for obj in all_amenities
+    amenity_data = [obj.to_dict() for obj in all_amenities
                    if obj.id == amenity_id]
-    if amenity_obj == []:
+    if amenity_data == []:
         abort(404)
-    return jsonify(amenity_obj[0])
+    return jsonify(amenity_data[0])

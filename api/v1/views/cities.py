@@ -14,12 +14,12 @@ import uuid
 def list_cities_of_state(state_id):
     '''Retrieves a list of all City objects'''
     all_states = storage.all("State").values()
-    state_obj = [obj.to_dict() for obj in all_states if obj.id == state_id]
-    if state_obj == []:
+    state_data = [obj.to_dict() for obj in all_states if obj.id == state_id]
+    if state_data == []:
         abort(404)
-    list_cities = [obj.to_dict() for obj in storage.all("City").values()
+    city_list = [obj.to_dict() for obj in storage.all("City").values()
                    if state_id == obj.state_id]
-    return jsonify(list_cities)
+    return jsonify(city_list)
 
 
 @app_views.route('/states/<state_id>/cities', methods=['POST'])
@@ -31,14 +31,14 @@ def create_city(state_id):
     if 'name' not in request.get_json():
         abort(400, 'Missing name')
     all_states = storage.all("State").values()
-    state_obj = [obj.to_dict() for obj in all_states if obj.id == state_id]
-    if state_obj == []:
+    state_data = [obj.to_dict() for obj in all_states if obj.id == state_id]
+    if state_data == []:
         abort(404)
     cities = []
-    new_city = City(name=request.json['name'], state_id=state_id)
-    storage.new(new_city)
+    new_city_instance = City(name=request.json['name'], state_id=state_id)
+    storage.new(new_city_instance)
     storage.save()
-    cities.append(new_city.to_dict())
+    cities.append(new_city_instance.to_dict())
     return jsonify(cities[0]), 201
 
 
@@ -68,7 +68,7 @@ def delete_city(city_id):
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'])
-def updates_city(city_id):
+def update_city(city_id):
     '''Updates a City object'''
     all_cities = storage.all("City").values()
     city_obj = [obj.to_dict() for obj in all_cities if obj.id == city_id]

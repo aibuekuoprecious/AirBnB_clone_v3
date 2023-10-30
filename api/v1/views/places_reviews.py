@@ -14,8 +14,8 @@ import uuid
 def list_reviews_of_place(place_id):
     ''' Retrieves a list of all Review objects of a Place '''
     all_places = storage.all("Place").values()
-    place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-    if place_obj == []:
+    place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+    if place_data == []:
         abort(404)
     list_reviews = [obj.to_dict() for obj in storage.all("Review").values()
                     if place_id == obj.place_id]
@@ -33,12 +33,12 @@ def create_review(place_id):
     if 'text' not in request.get_json():
         abort(400, 'Missing text')
     all_places = storage.all("Place").values()
-    place_obj = [obj.to_dict() for obj in all_places if obj.id == place_id]
-    if place_obj == []:
+    place_data = [obj.to_dict() for obj in all_places if obj.id == place_id]
+    if place_data == []:
         abort(404)
     all_users = storage.all("User").values()
-    user_obj = [obj.to_dict() for obj in all_users if obj.id == user_id]
-    if user_obj == []:
+    user_data = [obj.to_dict() for obj in all_users if obj.id == user_id]
+    if user_data == []:
         abort(404)
     reviews = []
     new_review = Review(text=request.json['text'], place_id=place_id,

@@ -9,32 +9,32 @@ import uuid
 
 
 @app_views.route('/amenities/', methods=['GET'])
-def list_amenities():
+def amenity_list():
     '''Retrieves a list of all Amenity objects'''
-    list_amenities = [obj.to_dict() for obj in storage.all("Amenity").values()]
-    return jsonify(list_amenities)
+    amenity_list = [obj.to_dict() for obj in storage.all("Amenity").values()]
+    return jsonify(amenity_list)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'])
 def get_amenity(amenity_id):
     '''Retrieves an Amenity object'''
     all_amenities = storage.all("Amenity").values()
-    amenity_obj = [obj.to_dict() for obj in all_amenities
+    amenity_data = [obj.to_dict() for obj in all_amenities
                    if obj.id == amenity_id]
-    if amenity_obj == []:
+    if amenity_data == []:
         abort(404)
-    return jsonify(amenity_obj[0])
+    return jsonify(amenity_data[0])
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
     '''Deletes an Amenity object'''
     all_amenities = storage.all("Amenity").values()
-    amenity_obj = [obj.to_dict() for obj in all_amenities
+    amenity_data = [obj.to_dict() for obj in all_amenities
                    if obj.id == amenity_id]
-    if amenity_obj == []:
+    if amenity_data == []:
         abort(404)
-    amenity_obj.remove(amenity_obj[0])
+    amenity_data.remove(amenity_data[0])
     for obj in all_amenities:
         if obj.id == amenity_id:
             storage.delete(obj)
@@ -50,10 +50,10 @@ def create_amenity():
     if 'name' not in request.get_json():
         abort(400, 'Missing name')
     amenities = []
-    new_amenity = Amenity(name=request.json['name'])
-    storage.new(new_amenity)
+    new_amenity_instance = Amenity(name=request.json['name'])
+    storage.new(new_amenity_instance)
     storage.save()
-    amenities.append(new_amenity.to_dict())
+    amenities.append(new_amenity_instance.to_dict())
     return jsonify(amenities[0]), 201
 
 
@@ -61,15 +61,15 @@ def create_amenity():
 def updates_amenity(amenity_id):
     '''Updates an Amenity object'''
     all_amenities = storage.all("Amenity").values()
-    amenity_obj = [obj.to_dict() for obj in all_amenities
+    amenity_data = [obj.to_dict() for obj in all_amenities
                    if obj.id == amenity_id]
-    if amenity_obj == []:
+    if amenity_data == []:
         abort(404)
     if not request.get_json():
         abort(400, 'Not a JSON')
-    amenity_obj[0]['name'] = request.json['name']
+    amenity_data[0]['name'] = request.json['name']
     for obj in all_amenities:
         if obj.id == amenity_id:
             obj.name = request.json['name']
     storage.save()
-    return jsonify(amenity_obj[0]), 200
+    return jsonify(amenity_data[0]), 200
