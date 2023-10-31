@@ -145,3 +145,18 @@ class TestFileStorage(unittest.TestCase):
         storage = FileStorage()
         new_dict = storage.all()
         self.assertIsInstance(new_dict, dict)
+
+    def test_get_count_file_storage():
+        storage = FileStorage()
+        state = State(name="Florida")
+        storage.new(state)
+        storage.save()
+
+        retrieved_state = storage.get(State, state.id)
+        assert retrieved_state == state
+
+        count_all = storage.count()
+        assert count_all >= 1
+
+        count_states = storage.count(State)
+        assert count_states >= 1

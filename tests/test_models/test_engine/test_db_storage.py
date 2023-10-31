@@ -106,3 +106,18 @@ class TestFileStorage(unittest.TestCase):
         duplicate = models.storage.get('Place', self.p1.id)
         expected = self.p1.id
         self.assertEqual(expected, duplicate.id)
+
+    def test_get_count_db_storage():
+        storage = DBStorage()
+        state = State(name="California")
+        storage.new(state)
+        storage.save()
+
+        retrieved_state = storage.get(State, state.id)
+        assert retrieved_state == state
+
+        count_all = storage.count()
+        assert count_all >= 1
+
+        count_states = storage.count(State)
+        assert count_states >= 1
