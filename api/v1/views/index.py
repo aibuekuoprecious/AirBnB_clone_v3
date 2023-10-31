@@ -25,6 +25,6 @@ def status():
 def count():
     '''retrieves the number of each objects by type'''
     count_dict = {}
-    for cls in classes:
-        count_dict[cls] = storage.count(classes[cls])
+    for cls_name, cls in classes.items():
+        count_dict[cls_name] = storage.count(cls)
     return jsonify(count_dict)
