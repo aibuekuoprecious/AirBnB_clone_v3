@@ -4,6 +4,7 @@ Contains the TestDBStorageDocs and TestDBStorage classes
 """
 from datetime import datetime
 import inspect
+from typing import Self
 import models
 from models.engine import db_storage
 from models.amenity import Amenity
@@ -66,6 +67,31 @@ test_db_storage.py'])
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
 
+class TestDBStorage(unittest.TestCase):
+    def test_get_method(self):
+        """Test the get method of DBStorage"""
+        storage = DBStorage()
+        state = State(name="California")
+        storage.new(state)
+        storage.save()
+
+        retrieved_state = storage.get(State, state.id)
+        self.assertEqual(retrieved_state, state)
+
+    def test_count_method(self):
+        """Test the count method of DBStorage"""
+        storage = DBStorage()
+        state1 = State(name="California")
+        state2 = State(name="Nevada")
+        storage.new(state1)
+        storage.new(state2)
+        storage.save()
+
+        count_all = storage.count()
+        self.assertEqual(count_all, 2)
+
+        count_states = storage.count(State)
+        self.assertEqual(count_states, 2)
 
 class TestFileStorage(unittest.TestCase):
     """Test the FileStorage class"""
@@ -107,17 +133,20 @@ class TestFileStorage(unittest.TestCase):
         expected = self.p1.id
         self.assertEqual(expected, duplicate.id)
 
-    def test_get_count_db_storage():
+    def test_get_count_db_storage(self):
         storage = DBStorage()
         state = State(name="California")
         storage.new(state)
         storage.save()
 
         retrieved_state = storage.get(State, state.id)
-        assert retrieved_state == state
+        self.assertEqual(retrieved_state, state)
 
         count_all = storage.count()
-        assert count_all >= 1
+        self.assertGreaterEqual(count_all, 1)
 
         count_states = storage.count(State)
-        assert count_states >= 1
+        self.assertGreaterEqual(count_states, 1)
+        
+if __name__ == '__main__':
+    unittest.main()
